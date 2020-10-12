@@ -10,7 +10,7 @@
       }
       #game {
         margin: auto;
-        height: 700px;
+        height: 900px;
         width: 1600px;
         background: url(./f4ab23929ccde5acb598369381a5128d.jpg);
         overflow: hidden;
@@ -41,7 +41,6 @@
         float: right;
         right: 500px;
         position: absolute;
-
         top: 8px;
       }
     </style>
@@ -111,7 +110,7 @@
             }, 50);
           } else {
             if (rand(10) > 5) {
-              $("#game").append(`<img src="./gift.png " id="chik${chikid}">`);
+              $("#game").append(`<img src="./gift.png " id="chik${chikid}" class='a'>`);
               $("#game").append(`<img src="./gift2.png" id="cry${cryid}">`);
               $(`#chik${chikid}`).css({
                 left: rand(70) + "%",
@@ -133,13 +132,18 @@
       });
 
       $("#game").on("click", "img", function () {
-        $(this).attr("src", "./c.gif");
+        if ($(this).hasClass("a")) {
+          $(this).attr("src", "./c.gif");
+          score++;
+        } else {
+          $(this).attr("src", "./2.png");
+          score--;
+        }
 
         $(this).stop(true, false);
         $(this).hide(3000);
         $(this).css("pointer-events", "none");
 
-        score++;
         $("#text-score").text(score);
       });
     </script>
