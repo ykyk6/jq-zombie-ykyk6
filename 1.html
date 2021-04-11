@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        background-color: black;
+      }
+      #game {
+        margin: auto;
+        height: 900px;
+        width: 1600px;
+        background: url(./f4ab23929ccde5acb598369381a5128d.jpg);
+        overflow: hidden;
+        position: relative;
+        cursor: url(./abc.png) 50 50, auto;
+      }
+      #game img {
+        position: absolute;
+        height: 120px;
+      }
+      #btnPlace {
+        text-align: center;
+      }
+      #text-score1 {
+        font-size: 20px;
+        color: rgba(182, 21, 21, 0.932);
+        float: left;
+        left: 500px;
+        position: absolute;
+        top: 8px;
+      }
+      #text-score {
+        font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+      }
+      #text-time1 {
+        font-size: 20px;
+        color: rgba(247, 110, 19, 0.932);
+        float: right;
+        right: 500px;
+        position: absolute;
+        top: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="btnPlace"><input type="button" value="開始遊戲" id="btn-start" /></div>
+    <div id="text-score1">分數: <span id="text-score">0</span> 分</div>
+    <div id="text-time1">剩餘: <span id="text-time">30</span> 秒</div>
+
+    <div id="game"></div>
+    <script src="./jquery-3.5.1.min.js"></script>
+    <script>
+      let score = 0;
+      let timeleft = 30;
+
+      let chikid = 0;
+      let cryid = 0;
+
+      const rand = (num) => {
+        return Math.floor(Math.random() * num);
+      };
+
+      const movechik = (chikid) => {
+        $(`#chik${chikid}`).animate(
+          {
+            left: rand(70) + "%",
+            top: rand(70) + "%",
+          },
+          3000,
+          function () {
+            movechik(chikid);
+          }
+        );
+      };
+
+      const movecry = (cryid) => {
+        $(`#cry${cryid}`).animate(
+          {
+            right: rand(70) + "%",
+            top: rand(70) + "%",
+          },
+          3000,
+          function () {
+            movecry(cryid);
+          }
+        );
+      };
+
+      $("#btn-start").click(function () {
+        $(this).attr("disabled", true);
+
+        score = 0;
+        $("#text-score").text(score);
+        timeleft = 30;
+        $("#text-time").text(timeleft);
+
+        let timer = setInterval(function () {
+          timeleft--;
+          $("#text-time").text(timeleft);
+
+          if (timeleft === 0) {
+            clearInterval(timer);
+            $("#btn-start").attr("disabled", false);
+            $("#game img").remove();
+            setTimeout(() => {
+              alert("時間到");
+            }, 50);
+          } else {
+            if (rand(10) > 5) {
+              $("#game").append(`<img src="./gift.png " id="chik${chikid}" class='a'>`);
+              $("#game").append(`<img src="./gift2.png" id="cry${cryid}">`);
+              $(`#chik${chikid}`).css({
+                left: rand(70) + "%",
+                top: rand(70) + "%",
+              });
+              $(`#cry${cryid}`).css({
+                right: rand(70) + "%",
+                top: rand(70) + "%",
+              });
+
+              movechik(chikid);
+              movecry(cryid);
+
+              chikid++;
+              cryid++;
+            }
+          }
+        }, 1000);
+      });
+
+      $("#game").on("click", "img", function () {
+        if ($(this).hasClass("a")) {
+          $(this).attr("src", "./c.gif");
+          score++;
+        } else {
+          $(this).attr("src", "./2.png");
+          score--;
+        }
+
+        $(this).stop(true, false);
+        $(this).hide(3000);
+        $(this).css("pointer-events", "none");
+
+        $("#text-score").text(score);
+      });
+    </script>
+  </body>
+</html>
